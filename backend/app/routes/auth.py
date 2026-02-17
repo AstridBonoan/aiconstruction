@@ -5,6 +5,7 @@ from flask import request, redirect, jsonify, session, current_app
 from app.routes import api_bp
 from app.extensions import db
 from app.models import Tenant, OAuthCredential
+from app.middleware.jwt_auth import create_token, require_jwt
 from app.services.monday_oauth import (
     generate_state,
     get_authorize_url,
@@ -80,13 +81,34 @@ def monday_callback():
 
         db.session.commit()
 
+        jwt_token = create_token(
+            tenant.id,
+            current_app.config["SECRET_KEY"],
+            expires_hours=168,  # 7 days
+        )
         frontend_url = current_app.config.get("FRONTEND_URL", "http://localhost:3000")
-        return redirect(f"{frontend_url}?connected=1")
+        return redirect(f"{frontend_url}?connected=1&token={jwt_token}")
     except Exception as e:
         return jsonify({"error": "token_exchange_failed", "message": str(e)}), 500
 
 
 @api_bp.route("/auth/status", methods=["GET"])
 def auth_status():
-    """Return whether Monday is connected (demo: always false for demo mode)."""
+    """Return whether Monday is connected. Demo mode returns demo flag."""
     return jsonify({"connected": False, "demo": True}), 200
+
+
+@api_bp.route("/auth/me", methods=["GET"])
+@require_jwt
+def auth_me():
+    """Return current tenant from JWT. Requires Authorization: Bearer <token>."""
+    from flask import g
+    from app.models import Tenant
+    tenant = Tenant.query.get(g.tenant_id)
+    if not tenant:
+        return jsonify({"error": "tenant_not_found"}), 404
+    return jsonify({
+        "tenant_id": tenant.id,
+        "name": tenant.name,
+        "monday_account_id": tenant.monday_account_id,
+    }), 200

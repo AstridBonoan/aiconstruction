@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Card, CardHeader, CardBody } from '../components/Card';
 import { Badge } from '../components/Badge';
+import { CompletionChart } from '../components/charts/CompletionChart';
+import { TaskStatusChart } from '../components/charts/TaskStatusChart';
+import { CompletionGauge } from '../components/charts/CompletionGauge';
 
 export function DashboardPage() {
   const [data, setData] = useState(null);
@@ -39,7 +42,7 @@ export function DashboardPage() {
     <div className="space-y-6 md:space-y-8">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          Executive Portfolio
+          Executive Portfolio Dashboard
         </h1>
         <p className="mt-1 text-gray-500 dark:text-gray-400">
           {tenant?.name} (Demo - Simulated Monday.com data)
@@ -67,13 +70,41 @@ export function DashboardPage() {
         <Card>
           <CardBody>
             <p className="text-sm text-gray-500 dark:text-gray-400">Completion</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{ks.completion_percent ?? 0}%</p>
+            <div className="flex items-center gap-4 mt-1">
+              <div className="w-24 shrink-0">
+                <CompletionGauge percent={ks.completion_percent} />
+              </div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{ks.completion_percent ?? 0}%</p>
+            </div>
           </CardBody>
         </Card>
         <Card>
           <CardBody>
             <p className="text-sm text-gray-500 dark:text-gray-400">Avg Risk Score</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{ks.avg_risk_score ?? 0}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {ks.high_risk_items ?? 0} high / {ks.critical_risk_items ?? 0} critical
+            </p>
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader title="Risk by Project" subtitle="Horizontal bar chart" />
+          <CardBody>
+            <CompletionChart boards={boards} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader title="Task Status Distribution" subtitle="Portfolio-wide breakdown" />
+          <CardBody>
+            <TaskStatusChart
+              tasksComplete={ks.tasks_complete}
+              tasksInProgress={ks.tasks_in_progress}
+              tasksStuck={ks.tasks_stuck}
+              totalTasks={ks.total_tasks}
+            />
           </CardBody>
         </Card>
       </div>
@@ -83,7 +114,7 @@ export function DashboardPage() {
           <CardHeader title="Risk Overview" subtitle="Projects with elevated risk" />
           <CardBody>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              High risk items: {ks.high_risk_items ?? 0} | Critical: {ks.critical_risk_items ?? 0}
+              High risk: {ks.high_risk_items ?? 0} | Critical: {ks.critical_risk_items ?? 0}
             </p>
             <div className="space-y-3">
               {Array.isArray(boards) &&
@@ -103,7 +134,7 @@ export function DashboardPage() {
           </CardBody>
         </Card>
         <Card>
-          <CardHeader title="Task Status" subtitle="Portfolio-wide" />
+          <CardHeader title="Task Status" subtitle="Summary counts" />
           <CardBody>
             <div className="space-y-3">
               <div className="flex justify-between">

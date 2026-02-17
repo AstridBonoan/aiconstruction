@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Card, CardHeader, CardBody } from '../components/Card';
 import { Badge } from '../components/Badge';
+import { RiskDistributionChart } from '../components/charts/RiskDistributionChart';
+import { CompletionChart } from '../components/charts/CompletionChart';
 
 export function RiskPage() {
   const [scores, setScores] = useState([]);
+  const [boardScores, setBoardScores] = useState([]);
   const [scope, setScope] = useState('items');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,9 +16,18 @@ export function RiskPage() {
     setLoading(true);
     api
       .riskScores(scope)
-      .then((res) => setScores(res.scores || []))
+      .then((res) => {
+        setScores(res.scores || []);
+        if (scope === 'boards') setBoardScores(res.scores || []);
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+  }, [scope]);
+
+  useEffect(() => {
+    if (scope === 'items') {
+      api.riskScores('boards').then((r) => setBoardScores(r.scores || [])).catch(() => {});
+    }
   }, [scope]);
 
   if (loading) {
@@ -62,6 +74,21 @@ export function RiskPage() {
             By Project
           </button>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader title="Risk Distribution" subtitle="Items by risk level" />
+          <CardBody>
+            <RiskDistributionChart scores={scores} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader title="Project Risk Comparison" subtitle="Average risk score per project" />
+          <CardBody>
+            <CompletionChart boards={scope === 'boards' ? scores : boardScores} />
+          </CardBody>
+        </Card>
       </div>
 
       <Card>

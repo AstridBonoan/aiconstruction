@@ -30,10 +30,20 @@ export const demoRiskScores = [
 
 export const demoGraph = {
   nodes: [
-    { id: '1', label: 'Foundation - Concrete Pour', board_name: 'Riverside Tower', risk_score: 0, risk_level: 'low' },
-    { id: '2', label: 'Structural Steel - Level 1-5', board_name: 'Riverside Tower', risk_score: 45, risk_level: 'medium' },
-    { id: '3', label: 'MEP Rough-in - Floors 1-3', board_name: 'Riverside Tower', risk_score: 38, risk_level: 'medium' },
-    { id: '4', label: 'Curtain Wall Installation', board_name: 'Riverside Tower', risk_score: 72, risk_level: 'high' },
+    { id: 'item_1', label: 'Foundation - Excavation', board_name: 'Riverside Tower', risk_score: 0, risk_level: 'low' },
+    { id: 'item_2', label: 'Foundation - Concrete Pour', board_name: 'Riverside Tower', risk_score: 0, risk_level: 'low' },
+    { id: 'item_3', label: 'Structural Steel L1-5', board_name: 'Riverside Tower', risk_score: 45, risk_level: 'medium' },
+    { id: 'item_4', label: 'MEP Rough-in Floors 1-3', board_name: 'Riverside Tower', risk_score: 38, risk_level: 'medium' },
+    { id: 'item_5', label: 'Curtain Wall Install', board_name: 'Riverside Tower', risk_score: 72, risk_level: 'high' },
+    { id: 'item_6', label: 'Elevator Shaft', board_name: 'Riverside Tower', risk_score: 42, risk_level: 'medium' },
+    { id: 'item_7', label: 'Site Preparation', board_name: 'Westside Industrial', risk_score: 0, risk_level: 'low' },
+    { id: 'item_8', label: 'Warehouse Steel Frame', board_name: 'Westside Industrial', risk_score: 32, risk_level: 'medium' },
   ],
-  edges: [{ from: '1', to: '2' }, { from: '2', to: '3' }, { from: '2', to: '4' }],
+  edges: [
+    { from: 'item_2', to: 'item_3' },
+    { from: 'item_3', to: 'item_4' },
+    { from: 'item_3', to: 'item_5' },
+    { from: 'item_3', to: 'item_6' },
+    { from: 'item_7', to: 'item_8' },
+  ],
 };

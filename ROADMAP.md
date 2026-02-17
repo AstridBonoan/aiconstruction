@@ -38,8 +38,8 @@
 | feature/monday-oauth-integration | Done |
 | feature/jwt-verification-middleware | Done |
 | feature/token-encryption-layer | Done |
-| feature/board-sync-engine | Pending |
-| feature/webhook-engine | Pending |
+| feature/board-sync-engine | Done |
+| feature/webhook-engine | Done |
 
 **Phase 2 Outcome**: Replace mock data with real GraphQL calls. Secure token storage. Uninstall handling. Auto-sync board updates.
 

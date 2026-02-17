@@ -9,7 +9,7 @@ class Config:
 
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")
+    CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
     MONDAY_CLIENT_ID = os.environ.get("MONDAY_CLIENT_ID", "")
     MONDAY_CLIENT_SECRET = os.environ.get("MONDAY_CLIENT_SECRET", "")
     MONDAY_OAUTH_REDIRECT_URI = os.environ.get(
@@ -23,9 +23,9 @@ class DevelopmentConfig(Config):
     """Development configuration."""
 
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/construction_ai"
-    )
+    _base = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    _db_path = os.path.join(_base, "construction_ai.db").replace("\\", "/")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", f"sqlite:///{_db_path}")
 
 
 class ProductionConfig(Config):

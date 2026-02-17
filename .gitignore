@@ -46,6 +46,8 @@ yarn-error.log*
 # Build outputs
 frontend/dist/
 *.log
+*.db
+construction_ai.db
 
 # Testing
 .coverage

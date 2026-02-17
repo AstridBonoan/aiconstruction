@@ -15,15 +15,35 @@ The platform runs in demo mode with simulated Monday.com data. Boards, items, st
 
 ## Quick Start
 
+### Option A: Docker (recommended)
 ```bash
 cd construction-ai-suite
 docker-compose up -d
 ```
 
-Access:
-- Frontend: http://localhost:3000
+### Option B: Local (no Docker)
+Uses SQLite by default. No PostgreSQL required for demo.
+
+**Terminal 1 - Backend:**
+```bash
+cd backend
+pip install -r requirements.txt
+set FLASK_APP=app
+python run.py
+```
+
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+**Access:**
+- This machine: http://localhost:3000
+- Ubuntu laptop (same network): http://YOUR_WINDOWS_IP:3000
 - Backend API: http://localhost:8000
-- API health: http://localhost:8000/health
+- Health: http://localhost:8000/health
 
 ## API Endpoints (Demo)
 

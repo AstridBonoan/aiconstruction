@@ -44,6 +44,9 @@ export function DashboardPage() {
         <p className="mt-1 text-gray-500 dark:text-gray-400">
           {tenant?.name} (Demo - Simulated Monday.com data)
         </p>
+        {data?.source === 'fallback' && (
+          <p className="mt-1 text-amber-600 dark:text-amber-400 text-sm">Running in offline fallback mode</p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

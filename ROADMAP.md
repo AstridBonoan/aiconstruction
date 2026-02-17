@@ -37,7 +37,7 @@
 |--------|--------|
 | feature/monday-oauth-integration | Done |
 | feature/jwt-verification-middleware | Done |
-| feature/token-encryption-layer | Pending |
+| feature/token-encryption-layer | Done |
 | feature/board-sync-engine | Pending |
 | feature/webhook-engine | Pending |
 

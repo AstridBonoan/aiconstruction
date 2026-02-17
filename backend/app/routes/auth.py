@@ -6,6 +6,7 @@ from app.routes import api_bp
 from app.extensions import db
 from app.models import Tenant, OAuthCredential
 from app.middleware.jwt_auth import create_token, require_jwt
+from app.services.token_service import store_access_token
 from app.services.monday_oauth import (
     generate_state,
     get_authorize_url,
@@ -65,20 +66,7 @@ def monday_callback():
             db.session.add(tenant)
             db.session.flush()
 
-        cred = OAuthCredential.query.filter_by(tenant_id=tenant.id).first()
-        if cred:
-            cred.access_token_enc = access_token.encode("utf-8")  # Will encrypt in token-encryption feature
-            cred.scope = scope
-            cred.account_id = account_id
-        else:
-            cred = OAuthCredential(
-                tenant_id=tenant.id,
-                access_token_enc=access_token.encode("utf-8"),
-                scope=scope,
-                account_id=account_id,
-            )
-            db.session.add(cred)
-
+        store_access_token(tenant.id, access_token, scope=scope, account_id=account_id)
         db.session.commit()
 
         jwt_token = create_token(

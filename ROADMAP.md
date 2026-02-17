@@ -35,7 +35,7 @@
 
 | Branch | Status |
 |--------|--------|
-| feature/monday-oauth-integration | Pending |
+| feature/monday-oauth-integration | Done |
 | feature/jwt-verification-middleware | Pending |
 | feature/token-encryption-layer | Pending |
 | feature/board-sync-engine | Pending |

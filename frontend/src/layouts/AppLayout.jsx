@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '../components/ThemeToggle';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+
 const navItems = [
   { path: '/', label: 'Dashboard' },
   { path: '/risk', label: 'Risk Scores' },
@@ -56,6 +58,12 @@ export function AppLayout() {
                   {item.label}
                 </Link>
               ))}
+              <a
+                href={`${API_BASE}/auth/monday/authorize`}
+                className="px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Connect Monday
+              </a>
               <div className="px-4 md:px-0 mt-2 md:mt-0">
                 <ThemeToggle />
               </div>

@@ -11,6 +11,7 @@ def create_app(config_name: str = "default") -> Flask:
     """Create and configure the Flask application."""
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
     CORS(app, origins=app.config.get("CORS_ORIGINS", ["*"]))
 
